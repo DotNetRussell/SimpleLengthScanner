@@ -1,0 +1,36 @@
+#!/bin/bash
+
+if [[ $# -ne '4' ]] ; then 
+	echo 'Simple Length Scanner v1.0'
+	echo 'Author: Anthony Russell'
+	echo 'Twitter: @DotNetRussell'
+	echo
+	echo 'How to use:'
+	echo './lengthScanner <full path to target> <ignore content length #> <full path to wordlist>';
+	echo
+	echo 'Example:';
+	echo './lengthScanner http://10.10.10.10/target/path/ 12345 /usr/share/wordlists/dirb/big.txt';
+else
+
+	path=$1
+	ignore=$2
+	wordlist=$3
+	x=0
+	y=$(wc -l $wordlist | cut -d " " -f1)
+
+
+	for word in $(cat $wordlist); do
+	length=$(curl -s -I $path/$wordlist | grep Length | cut -d " " -f2 | xargs | tr -d ' \t\n\r')
+
+	((x++))
+
+	echo -n "                                                                                          "
+	echo -ne "\r$word"
+
+
+	if [ "$length" -ne "$ignore" ]; then
+		echo FOUND: $path;
+	fi
+
+	done
+fi
