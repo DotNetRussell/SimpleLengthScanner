@@ -15,22 +15,23 @@ else
 	path=$1
 	ignore=$2
 	wordlist=$3
-	x=0
-	y=$(wc -l $wordlist | cut -d " " -f1)
 
+	echo "Begining Scan"
+ 	y=$(wc -l $wordlist | cut -d " " -f1)
+	echo TOTAL TESTS: $y
 
 	for word in $(cat $wordlist); do
-	length=$(curl -s -I $path/$wordlist | grep Length | cut -d " " -f2 | xargs | tr -d ' \t\n\r')
+		length=$(curl -s -I $path/$wordlist | grep Length | cut -d " " -f2 | xargs | tr -d ' \t\n\r')
 
-	((x++))
+		((x++))
 
-	echo -n "                                                                                          "
-	echo -ne "\r$word"
+		echo -n "                                                                                          "
+		echo -ne "\r$word"
 
 
-	if [ "$length" -ne "$ignore" ]; then
-		echo FOUND: $path;
-	fi
+		if [ "$length" -ne "$ignore" ]; then
+			echo FOUND: $path;
+		fi
 
 	done
 fi
